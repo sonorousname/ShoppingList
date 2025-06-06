@@ -1,28 +1,38 @@
 package com.example.shoppinglist.presentation
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var shopListAdapter: ShopListAdapter
+    private var shopItemContainer: FragmentContainerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        shopItemContainer = findViewById(R.id.shop_item_container)
+
         val buttonAddItem = findViewById<FloatingActionButton>(R.id.floatingActionButton)
         buttonAddItem.setOnClickListener {
-            val intent = ShopItemActivity.newIntentAddItem(this)
-            startActivity(intent)
+            if (shopItemContainer == null) {
+                val intent = ShopItemActivity.newIntentAddItem(this)
+                startActivity(intent)
+            } else {
+                launchFragment(ShopItemFragment.newInstance())
+            }
         }
 
         setupRecyclerView()
@@ -33,6 +43,19 @@ class MainActivity : AppCompatActivity() {
             //Обновляем список с помощью submitList!!!
             shopListAdapter.submitList(it)
         }
+    }
+
+    override fun onEditingFinished() {
+        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+        supportFragmentManager.popBackStack()
+    }
+
+    private fun launchFragment(fragment: Fragment) {
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.shop_item_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun setupRecyclerView() {
@@ -57,8 +80,12 @@ class MainActivity : AppCompatActivity() {
 
         //Говорим, что делать при обычном клике
         shopListAdapter.onShopItemClickListener = {
-            val intent = ShopItemActivity.newIntentEditItem(this, it.id)
-            startActivity(intent)
+            if (shopItemContainer == null) {
+                val intent = ShopItemActivity.newIntentEditItem(this, it.id)
+                startActivity(intent)
+            } else {
+                launchFragment(ShopItemFragment.newInstance(it.id))
+            }
         }
 
         //Вынесли в отдельный метод удаление свайпом
