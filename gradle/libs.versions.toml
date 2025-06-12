@@ -1,6 +1,8 @@
 [versions]
 agp = "8.10.1"
-kotlin = "2.0.21"
+kotlin = "2.0.20"
+room_version = "2.6.1"
+ksp_version ="2.0.20-1.0.24"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -11,6 +13,12 @@ activity = "1.10.1"
 constraintlayout = "2.2.1"
 
 [libraries]
+#Библиотека Room
+room = {group = "androidx.room", name = "room-runtime", version.ref = "room_version"}
+#Кодогенератор
+room-compiler = {group="androidx.room", name = "room-compiler", version.ref ="room_version"}
+#optional - Kotlin Extensions and Coroutines support for Room
+room-ktx = {group = "androidx.room", name = "room-ktx", version.ref = "room_version"}
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -23,4 +31,5 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp = {id = "com.google.devtools.ksp", version.ref ="ksp_version"}
 

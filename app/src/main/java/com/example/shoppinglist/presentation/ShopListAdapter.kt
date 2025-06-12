@@ -73,6 +73,6 @@ class ShopListAdapter : ListAdapter<ShopItem, ShopItemViewHolder>(
             onShopItemClickListener?.invoke(shopItem)
         }
         holder.tvName.text = shopItem.name
-        holder.tvCount.text = shopItem.id.toString()
+        holder.tvCount.text = shopItem.count.toString()
     }
 }

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -36,6 +37,13 @@ android {
 }
 
 dependencies {
+
+    //Room
+    implementation(libs.room)
+// Кодогенератор Room
+    ksp(libs.room.compiler)
+    implementation("androidx.room:room-ktx:2.7.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

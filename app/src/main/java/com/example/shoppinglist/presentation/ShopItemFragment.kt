@@ -1,7 +1,6 @@
 package com.example.shoppinglist.presentation
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,10 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.ViewModelProvider
 import com.example.shoppinglist.R
-import com.example.shoppinglist.domain.ShopItem
 import com.google.android.material.textfield.TextInputLayout
 
 class ShopItemFragment : androidx.fragment.app.Fragment() {
@@ -52,7 +49,9 @@ class ShopItemFragment : androidx.fragment.app.Fragment() {
         initViews(view)
         viewModel = ViewModelProvider(this)[ShopItemViewModel::class.java]
 
+        //В методе onViewCreated вызываем метод requireArguments, получаем все значение
         val args = requireArguments()
+        //А уже из всех значение получим по ключу нужное, если его нет, то по-умолчанию UNDEFINED_ID
         shopItemId = args.getInt(KEY_SHOP_ITEM_ID, UNDEFINED_ID)
         when (shopItemId) {
             UNDEFINED_ID -> launchAddMode()
@@ -135,8 +134,12 @@ class ShopItemFragment : androidx.fragment.app.Fragment() {
         private const val UNDEFINED_ID = -1
         private const val KEY_SHOP_ITEM_ID = "shopItemId"
 
+        //Создаём метод создание экземпляра прямо во Фрагменте, который возвращает себя же, то есть Фрагмент
+        //Мы хотим передать shopItemId фрагменту. Если ничего не передать, то по-умолчанию он будет -1
         fun newInstance(shopItemId: Int = UNDEFINED_ID): ShopItemFragment {
+            //В методе создаём фрагмент и вписываем туда аргументы
             return ShopItemFragment().apply {
+                //Аргументы должны быть типа Bundle, поэтому создаём их (КЛЮЧ - Значение)
                 arguments = Bundle().apply {
                     putInt(KEY_SHOP_ITEM_ID, shopItemId)
                 }
