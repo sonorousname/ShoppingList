@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -53,8 +54,13 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
     private fun launchFragment(fragment: Fragment) {
         supportFragmentManager.popBackStack()
         supportFragmentManager.beginTransaction()
+            //Либо используем .add, тогда будут копиться фрагменты и при желании на кнопку назад
+            //можно будет перейти на предыдущий фрагмент. Нам не нужно этого, нам нужно заменять
+            //Чтобы при кнопке назад мы ушли с фрагментов
             .replace(R.id.shop_item_container, fragment)
+            //Добавляем в стэк, указываем имя при необходимости
             .addToBackStack(null)
+            //Обязательно коммитим, то есть приминяем все изменения!
             .commit()
     }
 
